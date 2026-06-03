@@ -1,0 +1,205 @@
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<div class="jewelry-slider-wrapper">
+  {% if section.settings.title != blank %}
+    <h2 class="slider-main-title">{{ section.settings.title }}</h2>
+  {% endif %}
+
+  <div class="swiper jewelrySwiper">
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        <div class="swiper-slide">
+          <a href="{{ block.settings.link }}" class="jewelry-card">
+            <div class="jewelry-image-wrapper">
+              <img src="{{ block.settings.image | img_url: '1000x' }}" alt="{{ block.settings.title }}" loading="lazy">
+              
+              <!-- Text Overlay on Image -->
+              <div class="jewelry-overlay">
+                <div class="jewelry-content">
+                  <h3 class="jewelry-title">{{ block.settings.title }}</h3>
+                  <p class="jewelry-subtitle">{{ block.settings.sub_title }}</p>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- Pagination dots (Optional) -->
+    <div class="swiper-pagination"></div>
+  </div>
+</div>
+
+<style>
+  .jewelry-slider-wrapper { 
+    padding: 0; 
+    background: #fff; 
+    overflow: hidden;
+  }
+  
+  .slider-main-title { 
+    text-align: center; 
+    margin: 40px 0; 
+    font-family: serif; 
+    font-size: 32px; 
+    letter-spacing: 1px; 
+  }
+
+  /* Swiper Slide Setup */
+  .jewelrySwiper { width: 100%; }
+  
+  /* Removing Gaps and Borders */
+  .jewelry-card { 
+    position: relative; 
+    display: block; 
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .jewelry-image-wrapper { 
+    position: relative; 
+    width: 100%; 
+    height: auto; 
+  }
+  
+  .jewelry-image-wrapper img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: Contain; 
+    display: block; 
+  }
+
+  /* Centered Overlay Styles */
+  .jewelry-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Halka dark gradient taaki white text dikhe */
+    background: rgba(0, 0, 0, 0.1); 
+    display: flex;
+    align-items: flex-end; /* Bottom alignment as per image */
+    justify-content: center;
+    padding-bottom: 60px; /* Text position from bottom */
+    transition: background 0.4s ease;
+  }
+  
+  .jewelry-card:hover .jewelry-overlay {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .jewelry-content { 
+    text-align: center; 
+    color: #ffffff; 
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .jewelry-title { 
+    margin: 0; 
+    font-family: serif; 
+    font-size: 28px; 
+    font-weight: 400; 
+    color: #ffffff;
+    text-transform: capitalize;
+  }
+
+  .jewelry-subtitle { 
+    margin: 8px 0 0; 
+    font-size: 13px; 
+    letter-spacing: 1.5px; 
+    text-transform: lowercase; 
+    opacity: 0.9; 
+    font-family: sans-serif;
+  }
+
+  /* Swiper load hone se pehle ka structure fix karne ke liye */
+.jewelrySwiper:not(.swiper-initialized) .swiper-wrapper {
+  display: flex !important;
+  flex-direction: row !important;
+  overflow: hidden !important;
+}
+
+/* Desktop pe 3 columns pehle se hi set rahenge */
+.jewelrySwiper:not(.swiper-initialized) .swiper-slide {
+  width: 33.33% !important;
+  flex: 0 0 33.33% !important;
+  max-width: 33.33% !important;
+}
+
+/* Mobile pe layout shift rokne ke liye */
+@media screen and (max-width: 749px) {
+  .jewelrySwiper:not(.swiper-initialized) .swiper-slide {
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+
+
+@media screen and (max-width: 749px) {
+  .jewelry-image-wrapper {
+    height: 450px;
+  }
+} 
+
+
+  /* Swiper Bullet styling */
+  .swiper-pagination-bullet { background: #fff; opacity: 0.6; }
+  .swiper-pagination-bullet-active { background: #fff; opacity: 1; }
+
+  /* Mobile Adjustments */
+  @media screen and (max-width: 749px) {
+    .jewelry-image-wrapper { height: auto; } /* Mobile Height */
+    .jewelry-title { font-size: 22px; }
+    .jewelry-subtitle { font-size: 11px; }
+  }
+</style>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var swiper = new Swiper(".jewelrySwiper", {
+      slidesPerView: 1, 
+      spaceBetween: 0, /* Image ke beech ka gap khatam karne ke liye */
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      breakpoints: {
+        600: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 } /* Desktop pe exactly 3 cards */
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Jewelry Category Slider",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Section Title", "default": "Our Collections" }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Category",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Lorem" },
+        { "type": "text", "id": "sub_title", "label": "Sub-title", "default": "Lorem ipsum dummy" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Jewelry Category Slider" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,167 @@
+{% schema %}
+{
+  "name": "Custom Image Grid",
+  "tag": "section",
+  "class": "custom-image-grid",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Grid Item",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Select Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Your Title"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Image Grid",
+      "blocks": [
+        { "type": "item" },
+        { "type": "item" },
+        { "type": "item" }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.custom-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+
+@media(max-width: 768px){
+  .custom-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.custom-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-card img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.custom-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 20px;
+  {% comment %} background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); {% endcomment %}
+  color: #fff;
+  padding: 0px 0px 75px 80px;
+}
+
+.collection-name {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 5px;
+}
+
+.custom-title {
+  font-family: Gotu;
+  font-weight: 400;
+  font-size: 30px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.custom-btn {
+  font-family: DM Sans;
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-block;
+  padding: 16px 32px;
+  background: #fff;
+  color: #3F3F3F;
+  text-transform: uppercase;
+  letter-spacing: 10%;
+}
+.custom-btn:hover{
+background: #000;
+color: #fff;
+}
+</style>
+
+<div class="custom-grid">
+  {% for block in section.blocks %}
+    
+    {% assign col = block.settings.collection %}
+    {% assign final_link = block.settings.button_link %}
+
+    {% if final_link == blank and col != blank %}
+      {% assign final_link = col.url %}
+    {% endif %}
+
+    <div class="custom-card">
+
+      {% if final_link != blank %}
+        <a href="{{ final_link }}">
+      {% endif %}
+
+      {% if block.settings.image != blank %}
+        <img src="{{ block.settings.image | image_url: width: 800 }}" alt="">
+      {% endif %}
+
+      <div class="custom-overlay">
+
+        {% if col != blank %}
+          <div class="collection-name">
+            {{ col.title }}
+          </div>
+        {% endif %}
+
+        <div class="custom-title">
+          {{ block.settings.title }}
+        </div>
+
+        {% if block.settings.button_text != blank %}
+          <div class="custom-btn">
+            {{ block.settings.button_text }}
+          </div>
+        {% endif %}
+
+      </div>
+
+      {% if final_link != blank %}
+        </a>
+      {% endif %}
+
+    </div>
+
+  {% endfor %}
+</div>

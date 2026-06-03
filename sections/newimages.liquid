@@ -1,0 +1,126 @@
+<style>
+.gallery-section {
+  padding: 80px 20px;
+  text-align: center;
+  background: #fff;
+}
+
+.gallery-subtitle {
+  font-family: DM Sans;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 10%;
+  color: #B76979;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.gallery-title {
+  font-family: Gotu;
+  font-weight: 400;
+  font-size: 30px;
+  letter-spacing: 10%;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  color: #3F3F3F;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+</style>
+
+<div class="gallery-section">
+  
+  {% if section.settings.subtitle != blank %}
+    <div class="gallery-subtitle">
+      {{ section.settings.subtitle }}
+    </div>
+  {% endif %}
+
+  {% if section.settings.title != blank %}
+    <div class="gallery-title">
+      {{ section.settings.title }}
+    </div>
+  {% endif %}
+
+  <div class="gallery-grid">
+    {% for block in section.blocks %}
+      <div class="gallery-item">
+        {% if block.settings.image != blank %}
+          <img src="{{ block.settings.image | image_url: width: 500 }}">
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Image Gallery",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "FIND US HERE"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "@AURUM"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Gallery Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Select Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Gallery",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

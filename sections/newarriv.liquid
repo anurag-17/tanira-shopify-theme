@@ -1,0 +1,251 @@
+{% comment %}
+  Featured Product Grid Section - Figma Style
+  A 4-column product grid with center heading, subtilte,
+  rounded images, price, ratings, and a centered 'View All' button.
+{% endcomment %}
+
+<style>
+ 
+
+  .featured-grid-header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding: 0 10px;
+  }
+
+  .featured-grid-header h2 {
+    font-family: serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #000;
+    margin: 0 0 10px 0;
+  }
+
+  .featured-grid-header p {
+    font-size: 16px;
+    margin: 0;
+    line-height:24px;
+  }
+
+  .unique-class-NgT3eG{
+    background: linear-gradient(170deg,rgba(255, 255, 255, 1) 0%, rgba(255, 251, 235, 1) 56%) !important;
+    padding:80px 0px;
+
+}
+
+  .featured-product-wrapper {
+    max-width: {{ section.settings.container_width }}px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+
+  .product-card-item {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card-item a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .product-item-image-wrapper {
+    border-radius: 0px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    position: relative;
+    aspect-ratio: 1 / 1.15;
+  }
+
+  .product-item-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    display: block;
+  }
+
+  .product-card-item:hover img {
+    transform: scale(1.05);
+  }
+
+  .product-item-info {
+    padding: 0 5px;
+    text-align: center;
+  }
+
+  .product-item-title {
+    font-family: DM Sans;
+    font-size: 16px;
+    color: #3F3F3F;
+    margin-bottom:0px;
+    line-height: 28px;
+    font-weight:400;
+    text-transform: uppercase;
+    letter-spacing: 10%;
+
+  }
+
+  .product-item-price-ratings {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  .product-item-price {
+    font-family: DM Sans;
+    font-weight: 400;
+    font-size: 16px;
+    color: #3F3F3F;
+    line-height:24px;
+    margin-bottom: 10px !important;
+    text-transform: uppercase;
+
+  }
+
+  .product-item-ratings {
+    color: #B76979;
+    font-size: 16px;
+    line-height: 1;
+  }
+  .star-filled { color: #B76979; }
+  .star-empty { color: #ccc; }
+
+  .view-all-button-wrapper {
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  .view-all-products-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: transparent;
+    border: 2px solid #e67e22;
+    color: #e67e22;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .unique-class-NgT3eG .featured-grid-header p {
+    padding-top: 16px;
+}
+
+.featured-products-grid-template--26748621881634__newarriv_4mAwdY {
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+
+
+  .view-all-products-btn:hover {
+    background-color: #e67e22;
+    color: #ffffff;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .featured-product-wrapper {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .featured-grid-header h2 { font-size: 30px; }
+    .featured-product-wrapper {
+      grid-template-columns: 1fr;
+    }
+    .testimonial-header h2 {
+    font-size: 30px !important;
+}
+    .product-item-image-wrapper {
+      aspect-ratio: 1 / 1;
+    }
+
+ 
+  }
+</style>
+
+<div class="featured-products-grid-{{ section.id }}">
+  <div class="featured-grid-header">
+    <h2>{{ section.settings.heading }}</h2>
+    <p>{{ section.settings.subtitle }}</p>
+  </div>
+
+  <div class="featured-product-wrapper">
+    {% assign collection = collections[section.settings.collection_handle] %}
+    {% if collection.products.size > 0 %}
+      {% for product in collection.products limit: 4 %}
+        <div class="product-card-item">
+          <a href="{{ product.url }}">
+            <div class="product-item-image-wrapper">
+              <img src="{{ product.featured_image | img_url: '600x' }}" alt="{{ product.title }}" loading="lazy">
+            </div>
+            
+            <div class="product-item-info">
+              <h3 class="product-item-title">{{ product.title }}</h3>
+              
+              <div class="product-item-price-ratings">
+                <p class="product-item-price">{{ product.price | money_without_trailing_zeros }}</p>
+                <div class="product-item-ratings">
+                  <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    {% else %}
+      {% for i in (1..4) %}
+        <div class="product-card-item">
+          <div class="product-item-image-wrapper">{{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}</div>
+          <div class="product-item-info">
+            <h3 class="product-item-title">Product {{ i }} Title</h3>
+            <div class="product-item-price-ratings">
+              <p class="product-item-price">$1,999</p>
+              <div class="product-item-ratings">★★★★★</div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  {% if section.settings.show_button %}
+    <div class="view-all-button-wrapper">
+      {% comment %} Agar custom_link khali hai toh default collection link par jayega {% endcomment %}
+      {% assign btn_link = section.settings.button_link | default: collection.url %}
+      <a href="{{ btn_link }}" class="view-all-products-btn">{{ section.settings.button_text }}</a>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Featured Products Grid",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "New Arrivals" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtitle", "default": "Discover our latest collection of exquisite pieces" },
+    { "type": "collection", "id": "collection_handle", "label": "Select Collection" },
+    { "type": "color", "id": "bg_color", "label": "Background Color", "default": "#ffffff" },
+    { "type": "range", "id": "container_width", "min": 1000, "max": 1600, "step": 100, "unit": "px", "label": "Container Width", "default": 1300 },
+    { "type": "header", "content": "Button Settings" },
+    { "type": "checkbox", "id": "show_button", "label": "Show Button", "default": true },
+    { "type": "text", "id": "button_text", "label": "Button Text", "default": "View All Products" },
+    { "type": "url", "id": "button_link", "label": "Button Link (Optional)", "info": "If empty, links to the selected collection" },
+    { "type": "header", "content": "Section Padding" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 5, "unit": "px", "label": "Padding Top", "default": 70 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 5, "unit": "px", "label": "Padding Bottom", "default": 60 }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products Grid"
+    }
+  ]
+}
+{% endschema %}

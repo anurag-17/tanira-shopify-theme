@@ -1,0 +1,129 @@
+<style>
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  text-align: center;
+  padding-bottom: 90px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.collection-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.collection-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: 0.3s ease;
+}
+
+.collection-item:hover img {
+  transform: scale(1.05);
+}
+
+.collection-title {
+  font-family: Gotu;
+  position: absolute;
+  bottom: 25px;
+  left: 0;
+  right: 0;
+  font-size: 35px;
+  letter-spacing: 0%;
+  color: #182C2B;
+  font-weight: 500;
+}
+
+.section-heading {
+  font-family: Gotu;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 32px;
+  letter-spacing: 10%;
+  font-size: 30px;
+  color: #3F3F3F;
+  padding-top: 70px;
+  text-transform: uppercase;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .collection-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+</style>
+
+<div class="page-width">
+  <div class="section-heading">
+    {{ section.settings.heading }}
+  </div>
+
+  <div class="collection-grid">
+    {% for block in section.blocks %}
+      <div class="collection-item">
+        <a href="{{ block.settings.collection.url }}">
+          <img 
+            src="{{ block.settings.image | image_url: width: 600 }}" 
+            alt="{{ block.settings.title }}"
+          >
+          <div class="collection-title">
+            {{ block.settings.title }}
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Collection Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "OUR COLLECTIONS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_block",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Collection Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "RINGS"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Collection Grid",
+      "blocks": [
+        { "type": "collection_block" },
+        { "type": "collection_block" },
+        { "type": "collection_block" },
+        { "type": "collection_block" }
+      ]
+    }
+  ]
+}
+{% endschema %}
